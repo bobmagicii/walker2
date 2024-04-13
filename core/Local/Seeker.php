@@ -4,8 +4,7 @@ namespace Local;
 
 use Nether\Common;
 
-class Seeker
-extends Common\Prototype {
+class Seeker {
 
 	protected mixed
 	$Content;

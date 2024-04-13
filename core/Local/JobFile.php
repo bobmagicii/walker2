@@ -3,6 +3,7 @@
 namespace Local;
 
 use Nether\Common;
+use Nether\Console;
 
 class JobFile
 extends Common\Prototype
@@ -44,6 +45,23 @@ implements
 	#[Common\Meta\PropertyListable]
 	public string
 	$Context = 'self';
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
+	protected function
+	OnReady(Common\Prototype\ConstructArgs $Args):
+	void {
+
+		$this->Seekers->Remap(function(string|array $In) {
+			if(is_string($In))
+			return new JobSeeker([ 'Class'=> $In ]);
+
+			return new JobSeeker($In);
+		});
+
+		return;
+	}
 
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
@@ -133,6 +151,15 @@ implements
 		));
 
 		return $Output;
+	}
+
+	static public function
+	DebugLn(string $Msg):
+	void {
+
+		Console\Util::PrintLn("[JobFile] {$Msg}");
+
+		return;
 	}
 
 };
