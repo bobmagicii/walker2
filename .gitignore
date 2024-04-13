@@ -1,0 +1,11 @@
+# typical project wide annoyances.
+
+/.phpunit.cache
+
+/backups
+/jobs
+/logs
+/temp
+/vendor
+
+# eof
