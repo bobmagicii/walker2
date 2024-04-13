@@ -45,7 +45,7 @@ extends Nether\Console\Client {
 	#[Console\Meta\Error(1, 'no job name specified')]
 	#[Console\Meta\Error(2, 'Job %s')]
 	public function
-	HandleResave():
+	HandleRehash():
 	int {
 
 		$Name = Common\Filters\Text::SlottableKey($this->GetInput(1)) ?: NULL;
