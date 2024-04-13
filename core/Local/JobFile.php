@@ -106,7 +106,7 @@ implements
 			$this->Filename,
 			Common\Filters\Text::Tabbify(json_encode(
 				$this->ToArray(),
-				(JSON_FORCE_OBJECT|JSON_PRETTY_PRINT)
+				(JSON_PRETTY_PRINT)
 			))
 		);
 

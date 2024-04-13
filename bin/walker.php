@@ -39,10 +39,43 @@ extends Nether\Console\Client {
 		return 0;
 	}
 
+	#[Console\Meta\Command('rehash')]
+	#[Console\Meta\Info('Read a job file and immediately resave it.')]
+	#[Console\Meta\Arg('name', 'name of this job file')]
+	#[Console\Meta\Error(1, 'no job name specified')]
+	#[Console\Meta\Error(2, 'Job %s')]
+	public function
+	HandleResave():
+	int {
+
+		$Name = Common\Filters\Text::SlottableKey($this->GetInput(1)) ?: NULL;
+
+		if(!$Name)
+		$this->Quit(1);
+
+		////////
+
+		try {
+			$Filename = $this->GetPathToJob($Name);
+			$Job = Local\JobFile::FromPath($Filename);
+		}
+
+		catch(Exception $Error) {
+			$this->Quit(2, $Error->GetMessage());
+		}
+
+		////////
+
+		$Job->Write();
+
+		return 0;
+	}
+
 	#[Console\Meta\Command('run')]
 	#[Console\Meta\Info('Run a job from the jobs directory.')]
 	#[Console\Meta\Arg('name', 'name of this job file')]
 	#[Console\Meta\Error(1, 'no job name specified')]
+	#[Console\Meta\Error(2, 'Job %s')]
 	public function
 	HandleRunJob():
 	int {
@@ -66,7 +99,7 @@ extends Nether\Console\Client {
 		}
 
 		catch(Exception $Error) {
-			throw $Error;
+			$this->Quit(2, $Error->GetMessage());
 		}
 
 		$Runner = new Local\JobRunner;
