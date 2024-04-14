@@ -1,6 +1,6 @@
 <?php
 
-namespace Local;
+namespace Walker;
 
 use Nether\Common;
 use Nether\Console;
@@ -54,7 +54,7 @@ extends Common\Prototype {
 			// the chain first.
 
 			($Job->Steps)
-			->Each(function(JobSeeker $S) {
+			->Each(function(JobStep $S) {
 
 				if(!$S->HasClass())
 				throw new Common\Error\RequiredDataMissing($S->Class, 'class');
@@ -68,7 +68,7 @@ extends Common\Prototype {
 			$StepBuffer = NULL;
 
 			($Job->Steps)
-			->Each(function(JobSeeker $S) use(&$StepBuffer) {
+			->Each(function(JobStep $S) use(&$StepBuffer) {
 
 				$Inst = $S->NewInstance();
 				$StepBuffer = $Inst->Run($StepBuffer);

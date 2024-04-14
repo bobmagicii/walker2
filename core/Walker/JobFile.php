@@ -1,6 +1,6 @@
 <?php
 
-namespace Local;
+namespace Walker;
 
 use Nether\Common;
 use Nether\Console;
@@ -41,9 +41,9 @@ implements
 
 		$this->Steps->Remap(function(string|array $In) {
 			if(is_string($In))
-			return new JobSeeker([ 'Class'=> $In ]);
+			return new JobStep([ 'Class'=> $In ]);
 
-			return new JobSeeker($In);
+			return new JobStep($In);
 		});
 
 		return;

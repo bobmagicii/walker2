@@ -1,10 +1,10 @@
 <?php
 
-namespace Local;
+namespace Walker;
 
 use Nether\Common;
 
-class JobSeeker
+class JobStep
 extends Common\Prototype {
 
 	#[Common\Meta\PropertyListable]

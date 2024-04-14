@@ -1,13 +1,13 @@
 <?php
 
-namespace Local\Seekers;
+namespace Walker\Step;
 
-use Local;
+use Walker;
 use Nether\Browser;
 use Nether\Common;
 
 class RemoteDocumentHTML
-extends Local\Seeker {
+extends Walker\Step {
 
 	public string
 	$URL;

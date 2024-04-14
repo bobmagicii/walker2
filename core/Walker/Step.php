@@ -1,10 +1,8 @@
 <?php
 
-namespace Local;
+namespace Walker;
 
-use Nether\Common;
-
-abstract class Seeker {
+abstract class Step {
 
 	abstract public function
 	Run(mixed $Input): mixed;

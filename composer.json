@@ -21,6 +21,7 @@
 	},
 	"autoload": {
 		"psr-0": {
+			"Walker\\": "core/",
 			"Local\\": "core/"
 		}
 	}

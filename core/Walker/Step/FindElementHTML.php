@@ -1,16 +1,13 @@
 <?php
 
-namespace Local\Seekers;
+namespace Walker\Step;
 
-use Local;
+use Walker;
 use Nether\Browser;
 use Nether\Common;
-use Nether\Console;
-
-use DOMElement;
 
 class FindElementHTML
-extends Local\Seeker {
+extends Walker\Step {
 
 	public string
 	$Selector;
@@ -19,7 +16,6 @@ extends Local\Seeker {
 	__Construct(string $Selector) {
 
 		$this->Selector = $Selector;
-
 		return;
 	}
 
@@ -30,11 +26,7 @@ extends Local\Seeker {
 		if(!($Input instanceof Browser\Document))
 		throw new Common\Error\FormatInvalid('Browser\Document');
 
-		/** @var Browser\Document $Input */
-
 		return $Input->Find($this->Selector);
-
-		return $Input;
 	}
 
 }

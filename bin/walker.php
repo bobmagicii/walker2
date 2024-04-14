@@ -48,7 +48,7 @@ extends Nether\Console\Client {
 
 		$Filename = $this->GetPathToJob($Name);
 
-		$Job = new Local\JobFile;
+		$Job = new Walker\JobFile;
 		$Job->Filename = $Filename;
 
 		$this->PrintBulletList([
@@ -78,7 +78,7 @@ extends Nether\Console\Client {
 
 		try {
 			$Filename = $this->GetPathToJob($Name);
-			$Job = Local\JobFile::FromPath($Filename);
+			$Job = Walker\JobFile::FromPath($Filename);
 		}
 
 		catch(Exception $Error) {
@@ -116,14 +116,14 @@ extends Nether\Console\Client {
 
 		try {
 			$Filename = $this->GetPathToJob($Name);
-			$Job = Local\JobFile::FromPath($Filename);
+			$Job = Walker\JobFile::FromPath($Filename);
 		}
 
 		catch(Exception $Error) {
 			$this->Quit(2, $Error->GetMessage());
 		}
 
-		$Runner = new Local\JobRunner;
+		$Runner = new Walker\JobRunner;
 		$Runner->Add($Job);
 		$Runner->Run();
 

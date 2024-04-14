@@ -1,13 +1,12 @@
 <?php
 
-namespace Local\Seekers;
+namespace Walker\Step;
 
-use Local;
+use Walker;
 use Nether\Common;
-use Nether\Console;
 
 class VarDump
-extends Local\Seeker {
+extends Walker\Step {
 
 	public function
 	Run(mixed $Input):
