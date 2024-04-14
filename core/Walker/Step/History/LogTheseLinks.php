@@ -6,7 +6,7 @@ use Walker;
 use Nether\Common;
 use Nether\Console;
 
-class LinkLogger
+class LogTheseLinks
 extends Walker\Step {
 
 	public string
@@ -32,7 +32,7 @@ extends Walker\Step {
 
 		////////
 
-		$Logger = new Walker\History\LinkLogger;
+		$Logger = new Walker\History\Links($this->Runner->App);
 
 		$Input->Each(function(string $URL) use($Logger, $Extra) {
 			$Logger->Add($URL, $Extra['Job.Name'], $this->Status);

@@ -1,6 +1,6 @@
 <?php
 
-namespace Walker\Step\Test;
+namespace Walker\Step\Setup;
 
 use Walker;
 use Nether\Common;
@@ -12,14 +12,9 @@ extends Walker\Step {
 	Run(mixed $In, Common\Datastore $Ex):
 	mixed {
 
+		$LinkLogger = new Walker\History\Links($this->Runner->App);
+
 		return $In;
-	}
-
-	protected function
-	TestHistoryDB():
-	void {
-
-		return;
 	}
 
 };

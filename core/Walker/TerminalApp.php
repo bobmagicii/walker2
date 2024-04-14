@@ -16,22 +16,25 @@ use Exception;
 class TerminalApp
 extends Console\Client {
 
-	protected string
+	public string
 	$AppRoot;
 
-	protected string
+	public string
 	$BootRoot;
 
-	protected string
+	public string
 	$JobRoot;
 
-	protected Common\Datastore
+	public string
+	$DBRoot;
+
+	public Common\Datastore
 	$Config;
 
-	protected Common\Datastore
+	public Common\Datastore
 	$Library;
 
-	protected Database\Manager
+	public Database\Manager
 	$DB;
 
 	////////////////////////////////////////////////////////////////
@@ -60,18 +63,6 @@ extends Console\Client {
 
 		////////
 
-		$this->DB = new Database\Manager;
-		$this->DB->Add(new Database\Connection\SQLite(
-			Name: 'History',
-			Database: Common\Filesystem\Util::Pathify(
-				$this->AppRoot,
-				Common\Filters\Text::SlottableKey($this->AppInfo->Name),
-				'history.sqlite'
-			)
-		));
-
-		////////
-
 		$this->JobRoot = match(TRUE) {
 			($this->HasOption('JobRoot'))
 			=> $this->GetOption('JobRoot'),
@@ -83,6 +74,30 @@ extends Console\Client {
 				'jobs'
 			)
 		};
+
+		$this->DBRoot = match(TRUE) {
+			($this->HasOption('DBRoot'))
+			=> $this->GetOption('DBRoot'),
+
+			default
+			=> Common\Filesystem\Util::Pathify(
+				$this->AppRoot,
+				Common\Filters\Text::SlottableKey($this->AppInfo->Name),
+				'dbs'
+			)
+		};
+
+		////////
+
+		if(!is_dir($this->DBRoot))
+		Common\Filesystem\Util::MkDir($this->DBRoot);
+
+		$this->DB = new Database\Manager;
+
+		$this->DB->Add(new Database\Connection\SQLite(
+			Name: 'History',
+			Database: Common\Filesystem\Util::Pathify($this->DBRoot, 'history.sqlite')
+		));
 
 		return;
 	}
@@ -270,13 +285,7 @@ extends Console\Client {
 
 			// unused deps from Nether\Database that dont need to be.
 
-			if(str_contains($File, "cakephp{$DS}"))
-			return FALSE;
-
 			if(str_contains($File, "phelium{$DS}"))
-			return FALSE;
-
-			if(str_contains($File, "robmorgan{$DS}"))
 			return FALSE;
 
 			if(str_contains($File, "symfony{$DS}console"))
