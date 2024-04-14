@@ -42,6 +42,7 @@ extends Common\Prototype {
 
 		$JobBuffer = NULL;
 		$ExtraData = Common\Datastore::FromArray([
+			'Job.Name'      => NULL,
 			'Job.Repeat'    => FALSE,
 			'Job.Iteration' => 0
 		]);
@@ -52,6 +53,7 @@ extends Common\Prototype {
 			$RunThisJob = TRUE;
 
 			while($RunThisJob) {
+				$ExtraData['Job.Name'] = basename($Job->Filename);
 				$ExtraData['Job.Iteration'] += 1;
 
 				static::DebugLn(sprintf(

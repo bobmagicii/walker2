@@ -30,12 +30,16 @@ extends Walker\Step {
 	Run(mixed $Input, Common\Datastore $ExtraData):
 	mixed {
 
+		// provide a way to begin on a specific page and also allow
+		// job repeats to bump the page number.
+
 		$ExtraData->Define('Page', $this->Page);
 
 		////////
 
 		$URL = $this->TransformURL($ExtraData);
 		$ExtraData->Set('URL', $URL);
+
 		static::DebugLn($URL);
 
 		////////

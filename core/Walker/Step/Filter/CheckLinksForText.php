@@ -50,7 +50,7 @@ extends Walker\Step {
 
 		$Output = Common\Datastore::FromArray($Input);
 
-		$Output->Filter(function(string $URL) {
+		$Output->Filter(function(string $URL) use($ExtraData) {
 
 			if($this->Delay) {
 				$Delay = $this->Delay;
@@ -71,9 +71,14 @@ extends Walker\Step {
 
 			////////
 
-			$Client = Browser\Client::FromURL($URL);
-			$Page = $Client->FetchAsHTML();
-			$Text = $Page->Text();
+			$DKey = "Document({$URL})";
+
+			if(!$ExtraData[$DKey]) {
+				$Client = Browser\Client::FromURL($URL);
+				$ExtraData[$DKey] = $Client->FetchAsHTML();
+			}
+
+			$Text = $ExtraData[$DKey]->Text();
 			$Find = preg_quote($this->Text, '#');
 
 			if(!preg_match("#\b{$Find}\b#ms", $Text))
@@ -90,7 +95,7 @@ extends Walker\Step {
 
 		////////
 
-		return $Output->GetData();
+		return $Output;
 	}
 
 	////////////////////////////////////////////////////////////////
