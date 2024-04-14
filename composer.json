@@ -12,7 +12,8 @@
 		}
 	},
 	"require": {
-		"netherphp/console": "dev-redux"
+		"netherphp/console": "dev-redux",
+		"netherphp/browser": "dev-master"
 	},
 	"require-dev": {
 		"dealerdirect/phpcodesniffer-composer-installer": "^1.0",

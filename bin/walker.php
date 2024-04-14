@@ -1,5 +1,6 @@
 <?php
 
+use Nether\Browser;
 use Nether\Common;
 use Nether\Console;
 
@@ -9,6 +10,26 @@ require(sprintf('%s/vendor/autoload.php', $AppRoot));
 #[Console\Meta\Application('Walker', '2.0.0-dev')]
 class App
 extends Nether\Console\Client {
+
+	protected Common\Datastore
+	$Config;
+
+	protected Common\Datastore
+	$Library;
+
+	protected function
+	OnReady():
+	void {
+
+		$this->Config = new Common\Datastore;
+		$this->Library = new Common\Datastore;
+
+		($this->Library)
+		->Shove('Browser', new Browser\Library($this->Config));
+
+
+		return;
+	}
 
 	#[Console\Meta\Command('new')]
 	#[Console\Meta\Info('Create a new job json file in the jobs directory.')]

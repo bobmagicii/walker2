@@ -16,4 +16,21 @@ extends Common\Prototype {
 	public array|Common\Datastore
 	$Args = [];
 
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
+	public function
+	HasClass():
+	bool {
+
+		return class_exists($this->Class);
+	}
+
+	public function
+	NewInstance():
+	object {
+
+		return new ($this->Class)(...$this->Args->GetData());
+	}
+
 };

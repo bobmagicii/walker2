@@ -14,10 +14,6 @@ implements
 	use
 	Common\Package\ToJSON;
 
-	const
-	ContextSelf    = 'self',
-	ContextSubpage = 'subpage';
-
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
@@ -25,26 +21,16 @@ implements
 	public ?string
 	$Filename = NULL;
 
-	#[Common\Meta\Info('The URL we start on as the first page.')]
+	#[Common\Meta\Info('Title to display for the job when doing things.')]
 	#[Common\Meta\PropertyListable]
-	public ?string
-	$URL = NULL;
-
-	#[Common\Meta\Info('Selector for finding the next page button.')]
-	#[Common\Meta\PropertyListable]
-	public ?string
-	$Next = NULL;
+	public string
+	$Title = 'Untitled Job';
 
 	#[Common\Meta\Info('Selector for finding the objects we want to inspect.')]
 	#[Common\Meta\PropertyListable]
 	#[Common\Meta\PropertyFactory('FromArray')]
 	public array|Common\Datastore
-	$Seekers = [];
-
-	#[Common\Meta\Info('Selector for finding the objects we want to inspect.')]
-	#[Common\Meta\PropertyListable]
-	public string
-	$Context = 'self';
+	$Steps = [];
 
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
@@ -53,7 +39,7 @@ implements
 	OnReady(Common\Prototype\ConstructArgs $Args):
 	void {
 
-		$this->Seekers->Remap(function(string|array $In) {
+		$this->Steps->Remap(function(string|array $In) {
 			if(is_string($In))
 			return new JobSeeker([ 'Class'=> $In ]);
 

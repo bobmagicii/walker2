@@ -40,13 +40,46 @@ extends Common\Prototype {
 
 		////////
 
+		$JobBuffer = NULL;
+
 		($this->Jobs)
-		->Each(function(JobFile $Job) {
+		->Each(function(JobFile $Job) use(&$JobBuffer) {
 
 			static::DebugLn(sprintf(
 				'Running %s',
 				$Job->GetFilename()
 			));
+
+			// make sure we wont fail in any obvious ways by checking
+			// the chain first.
+
+			($Job->Steps)
+			->Each(function(JobSeeker $S) {
+
+				if(!$S->HasClass())
+				throw new Common\Error\RequiredDataMissing($S->Class, 'class');
+
+				return;
+			});
+
+			// execute the entire chain passing the data from the
+			// previous run forwards.
+
+			$StepBuffer = NULL;
+
+			($Job->Steps)
+			->Each(function(JobSeeker $S) use(&$StepBuffer) {
+
+				$Inst = $S->NewInstance();
+				$StepBuffer = $Inst->Run($StepBuffer);
+
+				return;
+			});
+
+			$JobBuffer = $StepBuffer;
+
+			//static::DebugLn("Final:");
+			//Common\Dump::Var($Buffer);
 
 			return;
 		});
