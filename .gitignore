@@ -2,8 +2,9 @@
 
 /.phpunit.cache
 
+/build
 /backups
-/jobs
+/walker
 /logs
 /temp
 /vendor

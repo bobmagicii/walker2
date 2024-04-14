@@ -1,21 +1,45 @@
 <?php
 
+list($AppRoot, $BootRoot) = (function(){
+	if(Phar::Running(FALSE) !== '')
+	return [ dirname(Phar::Running(FALSE)), Phar::Running(TRUE) ];
+
+	return array_fill(0, 2, dirname(__FILE__, 2));
+})();
+
+require(sprintf('%s/vendor/autoload.php', $BootRoot));
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
 use Nether\Browser;
 use Nether\Common;
 use Nether\Console;
 
-$AppRoot = dirname(__FILE__, 2);
-require(sprintf('%s/vendor/autoload.php', $AppRoot));
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
-#[Console\Meta\Application('Walker', '2.0.0-dev')]
+#[Console\Meta\Application('Walker', '2.0.0-dev', Phar: 'walker.phar')]
 class App
 extends Nether\Console\Client {
+
+	protected string
+	$AppRoot;
+
+	protected string
+	$BootRoot;
+
+	protected string
+	$JobRoot;
 
 	protected Common\Datastore
 	$Config;
 
 	protected Common\Datastore
 	$Library;
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
 
 	protected function
 	OnReady():
@@ -27,9 +51,28 @@ extends Nether\Console\Client {
 		($this->Library)
 		->Shove('Browser', new Browser\Library($this->Config));
 
+		////////
+
+		$this->AppRoot = $this->GetOption('AppRoot');
+		$this->BootRoot = $this->GetOption('BootRoot');
+
+		$this->JobRoot = match(TRUE) {
+			($this->HasOption('JobRoot'))
+			=> $this->GetOption('JobRoot'),
+
+			default
+			=> Common\Filesystem\Util::Pathify(
+				$this->AppRoot,
+				Common\Filters\Text::SlottableKey($this->AppInfo->Name),
+				'jobs'
+			)
+		};
 
 		return;
 	}
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
 
 	#[Console\Meta\Command('new')]
 	#[Console\Meta\Info('Create a new job json file in the jobs directory.')]
@@ -137,15 +180,8 @@ extends Nether\Console\Client {
 	GetPathToJob(string $Name):
 	string {
 
-		$AppRoot = $this->GetOption('AppRoot');
-
-		if(!$AppRoot)
-		throw new Common\Error\RequiredDataMissing('AppRoot', 'string');
-
-		////////
-
 		$Filename = Common\Filesystem\Util::Pathify(
-			$AppRoot, 'jobs', sprintf('%s.json', $Name)
+			$this->JobRoot, sprintf('%s.json', $Name)
 		);
 
 		////////
@@ -153,8 +189,53 @@ extends Nether\Console\Client {
 		return $Filename;
 	}
 
+	protected function
+	GetPharFiles():
+	Common\Datastore {
+
+		$Index = parent::GetPharFiles();
+		$Index->Push('core');
+
+		return $Index;
+	}
+
+	protected function
+	GetPharFileFilters():
+	Common\Datastore {
+
+		$Filters = parent::GetPharFileFilters();
+
+		$Filters->Push(function(string $File) {
+
+			$DS = DIRECTORY_SEPARATOR;
+
+			// dev deps that dont need to be.
+
+			if(str_contains($File, "squizlabs{$DS}"))
+			return FALSE;
+
+			if(str_contains($File, "dealerdirect{$DS}"))
+			return FALSE;
+
+			if(str_contains($File, "netherphp{$DS}standards"))
+			return FALSE;
+
+			// unused deps from Nether\Common that dont need to be.
+
+			if(str_contains($File, "monolog{$DS}"))
+			return FALSE;
+
+			////////
+
+			return TRUE;
+		});
+
+		return $Filters;
+	}
+
 };
 
 exit(App::Realboot([
-	'AppRoot' => $AppRoot
+	'AppRoot'  => Common\Filesystem\Util::Repath($AppRoot),
+	'BootRoot' => $BootRoot
 ]));
