@@ -8,6 +8,9 @@ use Nether\Console;
 class JobRunner
 extends Common\Prototype {
 
+	protected TerminalApp
+	$App;
+
 	#[Common\Meta\PropertyObjectify]
 	protected Common\Datastore
 	$Jobs;

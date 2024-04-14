@@ -6,7 +6,7 @@ use Nether\Common;
 
 abstract class Step {
 
-	protected
+	protected JobRunner
 	$Runner;
 
 	public function

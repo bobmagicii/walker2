@@ -6,7 +6,11 @@ class LinkLogger {
 
 	public function
 	__Construct() {
-		// open sqlite db
+
+		//$H = $this->DB->Get('History');
+		//$H->Query('CREATE TABLE `HistoryLink` (`ID` INT UNSIGNED, `URL` VARCHAR(255), `Status` VARCHAR(16), `ExtraJSON` TEXT);');
+		//Common\Dump::Var($H->Query('SELECT * FROM `HistoryLink`;')->Glomp());
+
 		return;
 	}
 
