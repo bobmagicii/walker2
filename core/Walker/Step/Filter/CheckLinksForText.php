@@ -21,14 +21,18 @@ extends Walker\Step {
 	public int
 	$Delay;
 
+	public float
+	$Drift;
+
 	public ?string
 	$Text;
 
 	public function
-	__Construct(?string $Text, int $Delay=0) {
+	__Construct(?string $Text, int $Delay=0, float $Drift=0.2) {
 
 		$this->Text = $Text;
 		$this->Delay = $Delay;
+		$this->Drift = $Drift;
 
 		return;
 	}
@@ -48,7 +52,24 @@ extends Walker\Step {
 
 		$Output->Filter(function(string $URL) {
 
-			static::DebugLn($URL);
+			if($this->Delay) {
+				$Delay = $this->Delay;
+
+				if($Delay < 0)
+				$Delay = abs(random_int(
+					floor($Delay * (1.0 + $this->Drift)),
+					ceil($Delay * (1.0 - $this->Drift))
+				));
+
+				static::DebugLn("{$URL} ({$Delay}s)");
+				sleep($Delay);
+			}
+
+			else {
+				static::DebugLn($URL);
+			}
+
+			////////
 
 			$Client = Browser\Client::FromURL($URL);
 			$Page = $Client->FetchAsHTML();

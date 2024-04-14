@@ -74,6 +74,23 @@ extends Nether\Console\Client {
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
+	#[Console\Meta\Command('config')]
+	#[Console\Meta\Info('Show/Edit configuration settings.')]
+	public function
+	HandleInfo():
+	int {
+
+		$Browser = Browser\Client::FromURL('http://pegasusgate.net');
+
+		$this
+		->PrintAppHeader('Config')
+		->PrintBulletList([
+			'UserAgent' => $Browser->GetUserAgent()
+		]);
+
+		return 0;
+	}
+
 	#[Console\Meta\Command('new')]
 	#[Console\Meta\Info('Create a new job json file in the jobs directory.')]
 	#[Console\Meta\Arg('name', 'name of this job file')]
@@ -81,6 +98,8 @@ extends Nether\Console\Client {
 	public function
 	HandleNewJob():
 	int {
+
+		$this->PrintAppHeader('New Job File');
 
 		$Name = Common\Filters\Text::SlottableKey($this->GetInput(1)) ?: NULL;
 
@@ -112,6 +131,8 @@ extends Nether\Console\Client {
 	HandleRehash():
 	int {
 
+		$this->PrintAppHeader('Rehash Job File');
+
 		$Name = Common\Filters\Text::SlottableKey($this->GetInput(1)) ?: NULL;
 
 		if(!$Name)
@@ -129,6 +150,10 @@ extends Nether\Console\Client {
 		}
 
 		////////
+
+		$this->PrintBulletList([
+			'Job File' => $Job->Filename
+		]);
 
 		$Job->Write();
 
@@ -156,6 +181,8 @@ extends Nether\Console\Client {
 		$this->Quit(1);
 
 		////////
+
+		$this->PrintAppHeader("Run {$Name}");
 
 		try {
 			$Filename = $this->GetPathToJob($Name);
