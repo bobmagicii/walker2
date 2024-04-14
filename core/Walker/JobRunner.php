@@ -41,46 +41,59 @@ extends Common\Prototype {
 		////////
 
 		$JobBuffer = NULL;
-		$ExtraData = new Common\Datastore;
+		$ExtraData = Common\Datastore::FromArray([
+			'Job.Repeat'    => FALSE,
+			'Job.Iteration' => 0
+		]);
 
 		($this->Jobs)
 		->Each(function(JobFile $Job) use(&$JobBuffer, &$ExtraData) {
 
-			static::DebugLn(sprintf(
-				'Running %s',
-				$Job->GetFilename()
-			));
+			$RunThisJob = TRUE;
 
-			// make sure we wont fail in any obvious ways by checking
-			// the chain first.
+			while($RunThisJob) {
+				$ExtraData['Job.Iteration'] += 1;
 
-			($Job->Steps)
-			->Each(function(JobStep $S) {
+				static::DebugLn(sprintf(
+					'Running %s (Iter: 1)',
+					$Job->GetFilename(),
+					$ExtraData['Job.Iteration']
+				));
 
-				if(!$S->HasClass())
-				throw new Common\Error\RequiredDataMissing($S->Class, 'class');
+				// make sure we wont fail in any obvious ways by checking
+				// the chain first.
 
-				return;
-			});
+				($Job->Steps)
+				->Each(function(JobStep $S) {
 
-			// execute the entire chain passing the data from the
-			// previous run forwards.
+					if(!$S->HasClass())
+					throw new Common\Error\RequiredDataMissing($S->Class, 'class');
 
-			$StepBuffer = NULL;
+					return;
+				});
 
-			($Job->Steps)
-			->Each(function(JobStep $S) use(&$StepBuffer, &$ExtraData) {
+				// execute the entire chain passing the data from the
+				// previous run forwards.
 
-				$Inst = $S->NewInstance();
-				$StepBuffer = $Inst->Run($StepBuffer, $ExtraData);
+				$StepBuffer = NULL;
 
-				return;
-			});
+				($Job->Steps)
+				->Each(function(JobStep $S) use(&$StepBuffer, &$ExtraData) {
 
-			$JobBuffer = $StepBuffer;
+					$Inst = $S->NewInstance();
+					$Inst->SetRunner($this);
 
-			//static::DebugLn("Final:");
-			//Common\Dump::Var($Buffer);
+					$StepBuffer = $Inst->Run(
+						$StepBuffer,
+						$ExtraData
+					);
+
+					return;
+				});
+
+				$RunThisJob = $ExtraData['Job.Repeat'] ?: FALSE;
+				$JobBuffer = $StepBuffer;
+			}
 
 			return;
 		});

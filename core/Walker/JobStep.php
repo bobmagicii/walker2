@@ -57,7 +57,9 @@ implements
 	NewInstance():
 	object {
 
-		return new ($this->Class)(...$this->Args->GetData());
+		$Output = new ($this->Class)(...$this->Args->GetData());
+
+		return $Output;
 	}
 
 };

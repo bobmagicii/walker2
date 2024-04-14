@@ -22,10 +22,14 @@ extends Walker\Step {
 	public bool
 	$Unique;
 
+	public string
+	$Selector;
+
 	public function
-	__Construct(bool $Unique=TRUE) {
+	__Construct(bool $Unique=TRUE, string $Selector="a[href]") {
 
 		$this->Unique = $Unique;
+		$this->Selector = $Selector;
 
 		return;
 	}
@@ -45,7 +49,7 @@ extends Walker\Step {
 
 		////////
 
-		$Links = $Input->Find('a[href]');
+		$Links = $Input->Find($this->Selector);
 		$Found = new Common\Datastore;
 
 		($Links)
