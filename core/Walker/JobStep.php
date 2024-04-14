@@ -4,8 +4,18 @@ namespace Walker;
 
 use Nether\Common;
 
+use JsonSerializable;
+
 class JobStep
-extends Common\Prototype {
+extends Common\Prototype
+implements
+	JsonSerializable,
+	Common\Interfaces\ToArray,
+	Common\Interfaces\ToJSON {
+
+	use
+	Common\Package\ToJSON,
+	Common\Package\JsonSerializableAsToJSON;
 
 	#[Common\Meta\PropertyListable]
 	public ?string
@@ -15,6 +25,23 @@ extends Common\Prototype {
 	#[Common\Meta\PropertyListable]
 	public array|Common\Datastore
 	$Args = [];
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
+	public function
+	ToArray():
+	array {
+
+		$Output = [
+			'Class' => $this->Class
+		];
+
+		if($this->Args->Count())
+		$Output['Args'] = $this->Args->GetData();
+
+		return $Output;
+	}
 
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////

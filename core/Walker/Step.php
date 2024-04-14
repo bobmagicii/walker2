@@ -2,9 +2,11 @@
 
 namespace Walker;
 
+use Nether\Common;
+
 abstract class Step {
 
 	abstract public function
-	Run(mixed $Input): mixed;
+	Run(mixed $Input, Common\Datastore $ExtraData): mixed;
 
 };

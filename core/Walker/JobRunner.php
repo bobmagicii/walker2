@@ -41,9 +41,10 @@ extends Common\Prototype {
 		////////
 
 		$JobBuffer = NULL;
+		$ExtraData = new Common\Datastore;
 
 		($this->Jobs)
-		->Each(function(JobFile $Job) use(&$JobBuffer) {
+		->Each(function(JobFile $Job) use(&$JobBuffer, &$ExtraData) {
 
 			static::DebugLn(sprintf(
 				'Running %s',
@@ -68,10 +69,10 @@ extends Common\Prototype {
 			$StepBuffer = NULL;
 
 			($Job->Steps)
-			->Each(function(JobStep $S) use(&$StepBuffer) {
+			->Each(function(JobStep $S) use(&$StepBuffer, &$ExtraData) {
 
 				$Inst = $S->NewInstance();
-				$StepBuffer = $Inst->Run($StepBuffer);
+				$StepBuffer = $Inst->Run($StepBuffer, $ExtraData);
 
 				return;
 			});

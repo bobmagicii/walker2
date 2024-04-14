@@ -5,11 +5,11 @@ namespace Walker\Step;
 use Walker;
 use Nether\Common;
 
-class VarDump
+class Dump
 extends Walker\Step {
 
 	public function
-	Run(mixed $Input):
+	Run(mixed $Input, Common\Datastore $ExtraData):
 	mixed {
 
 		Common\Dump::Var($Input);

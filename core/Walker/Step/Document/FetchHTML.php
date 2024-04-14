@@ -1,12 +1,13 @@
 <?php
 
-namespace Walker\Step;
+namespace Walker\Step\Document;
 
 use Walker;
 use Nether\Browser;
 use Nether\Common;
 
-class RemoteDocumentHTML
+#[Common\Meta\Info('Consume a URL as HTML and return the Document object.')]
+class FetchHTML
 extends Walker\Step {
 
 	public string
@@ -21,12 +22,11 @@ extends Walker\Step {
 	}
 
 	public function
-	Run(mixed $Input):
+	Run(mixed $Input, Common\Datastore $ExtraData):
 	mixed {
 
-		$Client = new Browser\Client([
-			'URL' => $this->URL
-		]);
+		$Client = new Browser\Client([ 'URL'=> $this->URL ]);
+		$ExtraData['URL'] = $this->URL;
 
 		$Output = $Client->FetchAsHTML();
 

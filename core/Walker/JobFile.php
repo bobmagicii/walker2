@@ -76,7 +76,19 @@ implements
 			$Output[$Prop->Name] = match(TRUE) {
 
 				($this->{$Prop->Name} instanceof Common\Datastore)
-				=> ($this->{$Prop->Name})->GetData(),
+				=> (
+					($this->{$Prop->Name})
+					->Map(function(mixed $I) {
+						if($I instanceof Common\Interfaces\ToArray)
+						return $I->ToArray();
+
+						return $I;
+					})
+					->GetData()
+				),
+
+				($this->{$Prop->Name} instanceof Common\Interfaces\ToArray)
+				=> $this->{$Prop->Name}->ToArray(),
 
 				default
 				=> $this->{$Prop->Name}
