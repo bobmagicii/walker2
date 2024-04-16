@@ -244,6 +244,13 @@ extends Console\Client {
 		$Indexer = Common\Filesystem\Indexer::FromPath($this->JobRoot);
 		$Jobs = $Indexer->ToDatastore();
 
+		$Jobs->Filter(
+			fn(string $Path)
+			=> str_ends_with(strtolower($Path), '.json')
+		);
+
+		////////
+
 		if(!$OptFull)
 		$Jobs->Remap(fn(string $Path)=> basename($Path));
 
