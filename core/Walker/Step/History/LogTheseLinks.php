@@ -35,7 +35,7 @@ extends Walker\Step {
 		$Logger = new Walker\History\Links($this->Runner->App);
 
 		$Input->Each(function(string $URL) use($Logger, $Extra) {
-			$Logger->Add($URL, $Extra['Job.Name'], $this->Status);
+			$Logger->Add($Extra['Job.Name'], $URL, $this->Status);
 			return;
 		});
 

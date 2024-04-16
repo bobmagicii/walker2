@@ -18,10 +18,10 @@ extends Walker\Step {
 
 		////////
 
-		$Logger = new Walker\History\LinkLogger;
+		$Logger = new Walker\History\Links($this->Runner->App);
 
 		$Output = $Input->Distill(function(string $URL) use($Logger, $Extra) {
-			return !$Logger->Has($URL, $Extra['Job.Name']);
+			return !$Logger->Has($Extra['Job.Name'], $URL);
 		});
 
 		return $Output;

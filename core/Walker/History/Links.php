@@ -3,6 +3,7 @@
 namespace Walker\History;
 
 use Walker;
+use Nether\Common;
 use Nether\Database;
 
 class Links {
@@ -20,14 +21,14 @@ class Links {
 	}
 
 	public function
-	Add(string $URL, string $Job='any', string $Status='added'):
+	Add(string $Job, string $URL, string $Status='added', ?iterable $Extra=NULL):
 	void {
 
 		return;
 	}
 
 	public function
-	Has(string $URL, string $Job='any'):
+	Has(string $Job, string $URL, ?string $Status=NULL):
 	bool {
 
 		return FALSE;
@@ -59,16 +60,32 @@ class Links {
 
 		$DB = $this->App->DB->Get('History');
 
-		if(!$this->DoesTableExist($DB, 'HistoryLink'))
+		if($this->DoesTableExist($DB, 'HistoryLink'))
+		return;
+
 		$DB->Query(<<< SQL
 			CREATE TABLE `HistoryLink` (
-				`ID` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+				`ID` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 				`UUID` CHAR(36),
+				`TimeAdded` INT UNSIGNED,
+				`Job` VARCHAR(255),
 				`URL` VARCHAR(255),
-				`Status` VARCHAR(16),
-				`ExtraJSON` TEXT
+				`Status` VARCHAR(16) DEFAULT NULL,
+				`ExtraJSON` TEXT DEFAULT NULL
 			);
 		SQL);
+
+		$Row = LinkEntity::Insert([
+			'UUID'      => Common\UUID::V7(),
+			'TimeAdded' => time(),
+			'Job'       => 'none',
+			'URL'       => 'https://google.com',
+			'Status'    => 'test',
+			'ExtraJSON' => ''
+		]);
+
+		Common\Dump::Var($Row);
+		$Row->Drop();
 
 		return;
 	}

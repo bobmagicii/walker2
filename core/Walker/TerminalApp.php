@@ -93,10 +93,11 @@ extends Console\Client {
 		Common\Filesystem\Util::MkDir($this->DBRoot);
 
 		$this->DB = new Database\Manager;
-
 		$this->DB->Add(new Database\Connection\SQLite(
 			Name: 'History',
-			Database: Common\Filesystem\Util::Pathify($this->DBRoot, 'history.sqlite')
+			Database: Common\Filesystem\Util::Pathify(
+				$this->DBRoot, 'history.sqlite'
+			)
 		));
 
 		return;
@@ -227,6 +228,27 @@ extends Console\Client {
 		$Runner = new JobRunner([ 'App'=> $this ]);
 		$Runner->Add($Job);
 		$Runner->Run();
+
+		return 0;
+	}
+
+	#[Console\Meta\Command('list')]
+	public function
+	HandleListJobs():
+	int {
+
+		$OptFull = $this->GetOption('full');
+
+		////////
+
+		$Indexer = Common\Filesystem\Indexer::FromPath($this->JobRoot);
+		$Jobs = $Indexer->ToDatastore();
+
+		if(!$OptFull)
+		$Jobs->Remap(fn(string $Path)=> basename($Path));
+
+		$this->PrintAppHeader('Available Jobs');
+		$this->PrintBulletList($Jobs);
 
 		return 0;
 	}
