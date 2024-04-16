@@ -233,6 +233,8 @@ extends Console\Client {
 	}
 
 	#[Console\Meta\Command('list')]
+	#[Console\Meta\Info('List the jobs in the directory.')]
+	#[Console\Meta\Option('--full', 'show the full filepath')]
 	public function
 	HandleListJobs():
 	int {
@@ -252,7 +254,10 @@ extends Console\Client {
 		////////
 
 		if(!$OptFull)
-		$Jobs->Remap(fn(string $Path)=> basename($Path));
+		$Jobs->Remap(
+			fn(string $Path)
+			=> str_replace('.json', '', basename($Path))
+		);
 
 		$this->PrintAppHeader('Available Jobs');
 		$this->PrintBulletList($Jobs);
