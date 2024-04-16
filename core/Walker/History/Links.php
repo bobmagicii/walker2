@@ -24,6 +24,15 @@ class Links {
 	Add(string $Job, string $URL, string $Status='added', ?iterable $Extra=NULL):
 	void {
 
+		// prototype's inserts from mysql seem to be working with sqlite.
+
+		Walker\History\LinkEntity::Insert([
+			'Job'       => $Job,
+			'URL'       => $URL,
+			'Status'    => $Status,
+			'ExtraJSON' => json_encode($Extra)
+		]);
+
 		return;
 	}
 
@@ -31,7 +40,20 @@ class Links {
 	Has(string $Job, string $URL, ?string $Status=NULL):
 	bool {
 
-		return FALSE;
+		// prototype's selects w/ counts are not yet working with sqlite
+
+		$Table = Walker\History\LinkEntity::GetTableInfo();
+		$DB = $this->App->DB->Get('History');
+
+		$Result = $DB->Query(sprintf(
+			'SELECT * FROM `%s` WHERE (`Job`=:Job AND `URL`=:URL) LIMIT 1;',
+			$Table->Name
+		));
+
+
+		$Row = $Result->Next();
+
+		return $Row !== FALSE;
 	}
 
 	////////////////////////////////////////////////////////////////
