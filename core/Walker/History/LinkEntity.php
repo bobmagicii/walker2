@@ -10,7 +10,10 @@ class LinkEntity
 extends Database\Prototype {
 
 	static public string
-	$DBA = 'History';
+	$DBA = 'HistoryLink';
+
+	static public string
+	$DBF = 'history-link.sqlite';
 
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////

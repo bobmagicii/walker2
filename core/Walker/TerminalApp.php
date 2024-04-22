@@ -75,6 +75,8 @@ extends Console\Client {
 			)
 		};
 
+		////////
+
 		$this->DBRoot = match(TRUE) {
 			($this->HasOption('DBRoot'))
 			=> $this->GetOption('DBRoot'),
@@ -87,16 +89,17 @@ extends Console\Client {
 			)
 		};
 
-		////////
-
 		if(!is_dir($this->DBRoot))
 		Common\Filesystem\Util::MkDir($this->DBRoot);
 
 		$this->DB = new Database\Manager;
+
+		////////
+
 		$this->DB->Add(new Database\Connection\SQLite(
-			Name: 'History',
+			Name: History\LinkEntity::$DBA,
 			Database: Common\Filesystem\Util::Pathify(
-				$this->DBRoot, 'history.sqlite'
+				$this->DBRoot, History\LinkEntity::$DBF
 			)
 		));
 
@@ -265,37 +268,29 @@ extends Console\Client {
 		return 0;
 	}
 
-	#[Console\Meta\Command('history')]
+	#[Console\Meta\Command('links')]
 	public function
 	HandleHistory():
 	int {
 
-		$this->PrintAppHeader('History DB');
+		$this->PrintAppHeader('Link DB');
 
 		////////
 
-		$DB = $this->DB->Get(History\LinkEntity::class);
-		$Table = History\LinkEntity::GetTableInfo();
-		$SQL = $DB->NewVerse();
+		$Links = new History\Links($this);
+		$Rows = $Links->Find(1);
 
 		////////
 
-		// this would normally be handled by the Find() method on the
-		// link entity class if that worked on sqlite.
+		$Head = [
+			'ID',
+			'Date',
+			'Job',
+			'Status',
+			'URL'
+		];
 
-		$SQL->Select($Table->Name);
-		$SQL->Fields('*');
-		$SQL->Sort('TimeAdded', $SQL::SortDesc);
-		$Result = (
-			Common\Datastore::FromArray($DB->Query($SQL)->Glomp())
-			->Remap(fn(object $Row)=> new History\LinkEntity($Row))
-		);
-
-		////////
-
-		$Head = [ 'ID', 'Date', 'Job', 'Status', 'URL' ];
-
-		$Result->Remap(fn(History\LinkEntity $Row)=> [
+		$Rows->Remap(fn(History\LinkEntity $Row)=> [
 			$Row->ID,
 			Common\Date::FromTime($Row->TimeAdded),
 			$Row->Job,
@@ -303,7 +298,9 @@ extends Console\Client {
 			$Row->URL
 		]);
 
-		$this->PrintTable($Head, $Result->GetData());
+		////////
+
+		$this->PrintTable($Head, $Rows->GetData());
 
 		return 0;
 	}

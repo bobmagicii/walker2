@@ -8,6 +8,12 @@ use Nether\Database;
 
 class Links {
 
+	const
+	SortNew = 'new',
+	SortOld = 'old';
+
+	////////
+
 	protected Walker\TerminalApp
 	$App;
 
@@ -43,7 +49,7 @@ class Links {
 		// prototype's selects w/ counts are not yet working with sqlite
 
 		$Table = Walker\History\LinkEntity::GetTableInfo();
-		$DB = $this->App->DB->Get('History');
+		$DB = $this->App->DB->Get('HistoryLink');
 
 		$Result = $DB->Query(sprintf(
 			'SELECT * FROM `%s` WHERE (`Job`=:Job AND `URL`=:URL) LIMIT 1;',
@@ -53,6 +59,64 @@ class Links {
 		$Row = $Result->Next();
 
 		return $Row !== FALSE;
+	}
+
+	public function
+	Find(int $Page=1, int $Limit=20, ?string $Job=NULL, ?string $URL=NULL, ?string $Status=NULL, string $Sort=self::SortNew):
+	Common\Datastore {
+
+		// this would normally be handled by the Find() method on the
+		// link entity class if that worked on sqlite.
+
+		$DB = $this->App->DB->Get(LinkEntity::class);
+		$Table = LinkEntity::GetTableInfo();
+		$SQL = $DB->NewVerse();
+		$Dataset = [];
+		$Offset = (Common\Filters\Numbers::Page($Page) - 1) * $Limit;
+
+		////////
+
+		$SQL->Select($Table->Name);
+		$SQL->Fields('*');
+		$SQL->Offset($Offset);
+		$SQL->Limit($Limit);
+
+		////////
+
+		if($Job !== NULL) {
+			$Dataset[':Job'] = $Job;
+			$SQL->Where('Job=:Job');
+		}
+
+		if($URL !== NULL) {
+			$Dataset[':URL'] = $URL;
+			$SQL->Where('URL=:URL');
+		}
+
+		if($Status !== NULL) {
+			$Dataset[':Status'] = $Status;
+			$SQL->Where('Status=:Status');
+		}
+
+		////////
+
+		switch($Sort) {
+			case static::SortNew:
+				$SQL->Sort('TimeAdded', $SQL::SortDesc);
+				break;
+			case static::SortOld:
+				$SQL->Sort('TimeAdded', $SQL::SortAsc);
+				break;
+		}
+
+		////////
+
+		$Result = (
+			Common\Datastore::FromArray($DB->Query($SQL, $Dataset)->Glomp())
+			->Remap(fn(object $Row)=> new LinkEntity($Row))
+		);
+
+		return $Result;
 	}
 
 	////////////////////////////////////////////////////////////////
@@ -79,15 +143,21 @@ class Links {
 	InstallHistoryLinkTable():
 	void {
 
-		$DB = $this->App->DB->Get('History');
+		$DBA = Walker\History\LinkEntity::$DBA;
+		$DBF = Walker\History\LinkEntity::$DBF;
+		$DBT = Walker\History\LinkEntity::GetTableInfo();
 
-		if($this->DoesTableExist($DB, 'HistoryLink')) {
+		////////
+
+		$DB = $this->App->DB->Get(Walker\History\LinkEntity::$DBA);
+
+		if($this->DoesTableExist($DB, $DBT->Name)) {
 			// throw exception for the step to catch and ignore.
 			return;
 		}
 
 		$DB->Query(<<< SQL
-			CREATE TABLE `HistoryLink` (
+			CREATE TABLE {$DBT->Name} (
 				`ID` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 				`UUID` CHAR(36),
 				`TimeAdded` INT UNSIGNED,
@@ -108,7 +178,7 @@ class Links {
 		]);
 
 		Common\Dump::Var($Row);
-		$Row->Drop();
+		//$Row->Drop();
 
 		return;
 	}
