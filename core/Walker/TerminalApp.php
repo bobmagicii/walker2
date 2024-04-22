@@ -270,6 +270,10 @@ extends Console\Client {
 	HandleHistory():
 	int {
 
+		$this->PrintAppHeader('History DB');
+
+		////////
+
 		$DB = $this->DB->Get(History\LinkEntity::class);
 		$Table = History\LinkEntity::GetTableInfo();
 		$SQL = $DB->NewVerse();
@@ -289,6 +293,8 @@ extends Console\Client {
 
 		////////
 
+		$Head = [ 'ID', 'Date', 'Job', 'Status', 'URL' ];
+
 		$Result->Remap(fn(History\LinkEntity $Row)=> [
 			$Row->ID,
 			Common\Date::FromTime($Row->TimeAdded),
@@ -297,11 +303,6 @@ extends Console\Client {
 			$Row->URL
 		]);
 
-		////////
-
-		$Head = [ 'ID', 'Date', 'Job', 'Status', 'URL' ];
-
-		$this->PrintAppHeader('History DB');
 		$this->PrintTable($Head, $Result->GetData());
 
 		return 0;
