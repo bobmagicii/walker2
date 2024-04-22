@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "40ff4d02a965368b6d439a17fbc70889",
+    "content-hash": "9c5ad60bcafecc5b8cbc7962d5826c0f",
     "packages": [
         {
             "name": "brick/math",
@@ -576,12 +576,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/netherphp/browser.git",
-                "reference": "d23cfd9be70175cd4be2e994472a7ce53866ce93"
+                "reference": "6d0259e04a71a9235099d65e2e50b2fa974543da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/netherphp/browser/zipball/d23cfd9be70175cd4be2e994472a7ce53866ce93",
-                "reference": "d23cfd9be70175cd4be2e994472a7ce53866ce93",
+                "url": "https://api.github.com/repos/netherphp/browser/zipball/6d0259e04a71a9235099d65e2e50b2fa974543da",
+                "reference": "6d0259e04a71a9235099d65e2e50b2fa974543da",
                 "shasum": ""
             },
             "require": {
@@ -623,20 +623,20 @@
                 "issues": "https://github.com/netherphp/browser/issues",
                 "source": "https://github.com/netherphp/browser/tree/master"
             },
-            "time": "2024-04-14T00:56:02+00:00"
+            "time": "2024-04-17T19:10:06+00:00"
         },
         {
             "name": "netherphp/common",
-            "version": "v5.0.34",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/netherphp/common.git",
-                "reference": "2b05d6f91c7818fd280e8f6f33b3aff58f65850d"
+                "reference": "7c37b0295bc4ac654480324627b9a80a0be48836"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/netherphp/common/zipball/2b05d6f91c7818fd280e8f6f33b3aff58f65850d",
-                "reference": "2b05d6f91c7818fd280e8f6f33b3aff58f65850d",
+                "url": "https://api.github.com/repos/netherphp/common/zipball/7c37b0295bc4ac654480324627b9a80a0be48836",
+                "reference": "7c37b0295bc4ac654480324627b9a80a0be48836",
                 "shasum": ""
             },
             "require": {
@@ -653,6 +653,7 @@
                 "netherphp/standards": ">=0.1.9",
                 "phpunit/phpunit": "^9.6"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-0": {
@@ -678,9 +679,9 @@
             ],
             "support": {
                 "issues": "https://github.com/netherphp/common/issues",
-                "source": "https://github.com/netherphp/common/tree/v5.0.34"
+                "source": "https://github.com/netherphp/common/tree/master"
             },
-            "time": "2024-04-11T00:41:49+00:00"
+            "time": "2024-04-22T21:57:27+00:00"
         },
         {
             "name": "netherphp/console",
@@ -688,12 +689,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/netherphp/console.git",
-                "reference": "13f882ad1979eada6b4a07d301d142aad37c146c"
+                "reference": "550cb02e28cf04eb5884d9259a93bd7badf144f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/netherphp/console/zipball/13f882ad1979eada6b4a07d301d142aad37c146c",
-                "reference": "13f882ad1979eada6b4a07d301d142aad37c146c",
+                "url": "https://api.github.com/repos/netherphp/console/zipball/550cb02e28cf04eb5884d9259a93bd7badf144f5",
+                "reference": "550cb02e28cf04eb5884d9259a93bd7badf144f5",
                 "shasum": ""
             },
             "require": {
@@ -739,7 +740,7 @@
                 "issues": "https://github.com/netherphp/console/issues",
                 "source": "https://github.com/netherphp/console/tree/redux"
             },
-            "time": "2024-04-14T03:29:40+00:00"
+            "time": "2024-04-22T21:57:11+00:00"
         },
         {
             "name": "netherphp/database",
@@ -747,12 +748,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/netherphp/database.git",
-                "reference": "99a02e0c97314a40c5cc3bfd79692307b3eac9b1"
+                "reference": "e641ebff6bc5ba421861168233d1f1ccded42e05"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/netherphp/database/zipball/99a02e0c97314a40c5cc3bfd79692307b3eac9b1",
-                "reference": "99a02e0c97314a40c5cc3bfd79692307b3eac9b1",
+                "url": "https://api.github.com/repos/netherphp/database/zipball/e641ebff6bc5ba421861168233d1f1ccded42e05",
+                "reference": "e641ebff6bc5ba421861168233d1f1ccded42e05",
                 "shasum": ""
             },
             "require": {
@@ -799,7 +800,7 @@
                 "issues": "https://github.com/netherphp/database/issues",
                 "source": "https://github.com/netherphp/database/tree/redux"
             },
-            "time": "2024-04-14T19:44:53+00:00"
+            "time": "2024-04-22T21:58:38+00:00"
         },
         {
             "name": "ozdemirburak/iris",
@@ -2515,9 +2516,17 @@
             "time": "2024-03-31T21:03:09+00:00"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "package": "netherphp/common",
+            "version": "9999999-dev",
+            "alias": "5.0.99",
+            "alias_normalized": "5.0.99.0"
+        }
+    ],
     "minimum-stability": "dev",
     "stability-flags": {
+        "netherphp/common": 20,
         "netherphp/console": 20,
         "netherphp/browser": 20,
         "netherphp/database": 20

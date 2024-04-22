@@ -7,7 +7,9 @@ list($AppRoot, $BootRoot, $BDS) = (function(string $PF, string $PU): array {
 	};
 })(Phar::Running(FALSE), Phar::Running(TRUE));
 
-require(join($BDS, [ $BootRoot, 'vendor', 'autoload.php' ]));
+require(join(
+	$BDS, [ $BootRoot, 'vendor', 'autoload.php' ]
+));
 
 exit(Walker\TerminalApp::Realboot([
 	'AppRoot'  => Nether\Common\Filesystem\Util::Repath($AppRoot),

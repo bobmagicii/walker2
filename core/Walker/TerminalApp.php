@@ -265,6 +265,48 @@ extends Console\Client {
 		return 0;
 	}
 
+	#[Console\Meta\Command('history')]
+	public function
+	HandleHistory():
+	int {
+
+		$DB = $this->DB->Get(History\LinkEntity::class);
+		$Table = History\LinkEntity::GetTableInfo();
+		$SQL = $DB->NewVerse();
+
+		////////
+
+		// this would normally be handled by the Find() method on the
+		// link entity class if that worked on sqlite.
+
+		$SQL->Select($Table->Name);
+		$SQL->Fields('*');
+		$SQL->Sort('TimeAdded', $SQL::SortDesc);
+		$Result = (
+			Common\Datastore::FromArray($DB->Query($SQL)->Glomp())
+			->Remap(fn(object $Row)=> new History\LinkEntity($Row))
+		);
+
+		////////
+
+		$Result->Remap(fn(History\LinkEntity $Row)=> [
+			$Row->ID,
+			Common\Date::FromTime($Row->TimeAdded),
+			$Row->Job,
+			$Row->Status,
+			$Row->URL
+		]);
+
+		////////
+
+		$Head = [ 'ID', 'Date', 'Job', 'Status', 'URL' ];
+
+		$this->PrintAppHeader('History DB');
+		$this->PrintTable($Head, $Result->GetData());
+
+		return 0;
+	}
+
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 

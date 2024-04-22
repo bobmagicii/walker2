@@ -12,6 +12,7 @@
 		}
 	},
 	"require": {
+		"netherphp/common": "dev-master as 5.0.99",
 		"netherphp/console": "dev-redux",
 		"netherphp/browser": "dev-master",
 		"netherphp/database": "dev-redux"

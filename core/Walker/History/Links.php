@@ -50,7 +50,6 @@ class Links {
 			$Table->Name
 		));
 
-
 		$Row = $Result->Next();
 
 		return $Row !== FALSE;
@@ -82,8 +81,10 @@ class Links {
 
 		$DB = $this->App->DB->Get('History');
 
-		if($this->DoesTableExist($DB, 'HistoryLink'))
-		return;
+		if($this->DoesTableExist($DB, 'HistoryLink')) {
+			// throw exception for the step to catch and ignore.
+			return;
+		}
 
 		$DB->Query(<<< SQL
 			CREATE TABLE `HistoryLink` (
