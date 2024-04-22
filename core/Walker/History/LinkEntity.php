@@ -47,5 +47,18 @@ extends Database\Prototype {
 	public string
 	$ExtraJSON;
 
+	static public function
+	Insert(iterable $Input):
+	?static {
+
+		$Output = new Common\Datastore([
+			'TimeAdded' => Common\Date::Unixtime()
+		]);
+
+		$Output->MergeRight($Input);
+
+		return parent::Insert($Output);
+	}
+
 };
 

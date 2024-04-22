@@ -43,22 +43,17 @@ class Links {
 	}
 
 	public function
-	Has(string $Job, string $URL, ?string $Status=NULL):
+	Has(?string $Job=NULL, ?string $URL=NULL, ?string $Status=NULL):
 	bool {
 
-		// prototype's selects w/ counts are not yet working with sqlite
+		$Rows = $this->Find(
+			Limit: 1,
+			Job: $Job,
+			URL: $URL,
+			Status: $Status
+		);
 
-		$Table = Walker\History\LinkEntity::GetTableInfo();
-		$DB = $this->App->DB->Get('HistoryLink');
-
-		$Result = $DB->Query(sprintf(
-			'SELECT * FROM `%s` WHERE (`Job`=:Job AND `URL`=:URL) LIMIT 1;',
-			$Table->Name
-		));
-
-		$Row = $Result->Next();
-
-		return $Row !== FALSE;
+		return $Rows->Count() > 0;
 	}
 
 	public function
@@ -117,6 +112,22 @@ class Links {
 		);
 
 		return $Result;
+	}
+
+	public function
+	DeleteByID(int $ID):
+	void {
+
+		$DB = $this->App->DB->Get(LinkEntity::class);
+		$Table = LinkEntity::GetTableInfo();
+		$SQL = $DB->NewVerse();
+
+		$SQL->Delete($Table->Name);
+		$SQL->Where('ID=:ID');
+
+		$DB->Query($SQL, [ ':ID'=> $ID ]);
+
+		return;
 	}
 
 	////////////////////////////////////////////////////////////////

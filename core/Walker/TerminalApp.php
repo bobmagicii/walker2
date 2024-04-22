@@ -269,8 +269,10 @@ extends Console\Client {
 	}
 
 	#[Console\Meta\Command('links')]
+	#[Console\Meta\Info('Browse/Manage the Link History table.')]
+	#[Console\Meta\Value('--delete', 'Delete row by ID')]
 	public function
-	HandleHistory():
+	HandleLinkDB():
 	int {
 
 		$this->PrintAppHeader('Link DB');
@@ -278,17 +280,18 @@ extends Console\Client {
 		////////
 
 		$Links = new History\Links($this);
-		$Rows = $Links->Find(1);
+		$OptDelID = $this->GetOption('delete');
+
+		if($OptDelID)
+		$Links->DeleteByID($OptDelID);
 
 		////////
 
 		$Head = [
-			'ID',
-			'Date',
-			'Job',
-			'Status',
-			'URL'
+			'ID', 'Date', 'Job', 'Status', 'URL'
 		];
+
+		$Rows = $Links->Find(1);
 
 		$Rows->Remap(fn(History\LinkEntity $Row)=> [
 			$Row->ID,

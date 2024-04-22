@@ -748,12 +748,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/netherphp/database.git",
-                "reference": "e641ebff6bc5ba421861168233d1f1ccded42e05"
+                "reference": "010334e7e45579b21b6837dcb5a06efdd078dcae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/netherphp/database/zipball/e641ebff6bc5ba421861168233d1f1ccded42e05",
-                "reference": "e641ebff6bc5ba421861168233d1f1ccded42e05",
+                "url": "https://api.github.com/repos/netherphp/database/zipball/010334e7e45579b21b6837dcb5a06efdd078dcae",
+                "reference": "010334e7e45579b21b6837dcb5a06efdd078dcae",
                 "shasum": ""
             },
             "require": {
@@ -800,7 +800,7 @@
                 "issues": "https://github.com/netherphp/database/issues",
                 "source": "https://github.com/netherphp/database/tree/redux"
             },
-            "time": "2024-04-22T21:58:38+00:00"
+            "time": "2024-04-22T22:34:51+00:00"
         },
         {
             "name": "ozdemirburak/iris",
